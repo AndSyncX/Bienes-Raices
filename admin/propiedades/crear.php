@@ -5,11 +5,29 @@
 
     if ($_SERVER['REQUEST_METHOD'] === "POST") {
         echo "<pre>";
-        var_dump($_POST['precio']);
+        var_dump($_POST);
         echo "</pre>";
 
+        // Asignar variables
         $titulo = $_POST['titulo'];
         $precio = $_POST['precio'];
+        $descripcion = $_POST['descripcion'];
+        $habitaciones = $_POST['habitaciones'];
+        $wc = $_POST['wc'];
+        $estacionamiento = $_POST['estacionamiento'];
+        $vendedores_id = $_POST['vendedor'];
+
+        // Insertar en la base de datos
+
+        $query = "INSERT INTO propiedades (titulo, precio, descripcion, habitaciones, wc, estacionamiento, vendedores_id) VALUES ('$titulo', '$precio', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$vendedores_id')";
+
+        //echo $query;
+
+        $resultado = mysqli_query($db, $query);
+
+        if ($resultado) {
+            echo "Insertado Correctamente";
+        }
     }
 
     // Funciones
@@ -36,26 +54,26 @@
                 <input type="file" id="imagen" accept="image/jpeg, image/png">
 
                 <label for="descripcion">Descripcion:</label>
-                <textarea id="descripcion"></textarea>
+                <textarea id="descripcion" name="descripcion"></textarea>
             </fieldset>
 
             <fieldset>
                 <legend>Información de la Propiedad</legend>
 
                 <label for="habitaciones">Habitaciones:</label>
-                <input type="number" id="habitaciones" placeholder="Ejm: 3" min="1" max="9">
+                <input type="number" id="habitaciones" name="habitaciones" placeholder="Ejm: 3" min="1" max="9">
 
                 <label for="wc">Baños:</label>
-                <input type="number" id="wc" placeholder="Ejm: 3" min="1" max="9">
+                <input type="number" id="wc" name="wc" placeholder="Ejm: 3" min="1" max="9">
 
                 <label for="estacionamiento">Estacionamiento:</label>
-                <input type="number" id="estacionamiento" placeholder="Ejm: 3" min="1" max="9">
+                <input type="number" id="estacionamiento" name="estacionamiento" placeholder="Ejm: 3" min="1" max="9">
             </fieldset>
 
             <fieldset>
                 <legend>Vendedor</legend>
 
-                <select name="" id="">
+                <select name="vendedor" id="">
                     <option value="1">Juan</option>
                     <option value="2">Karen</option>
                 </select>
