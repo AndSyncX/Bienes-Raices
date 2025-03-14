@@ -12,3 +12,11 @@
 .boton-verde {
     @include m.boton(v.$verde, inline-block);
 }
+
+.boton-rojo-block {
+    @include m.boton(v.$rojo, block);
+}
+
+.boton-verde-block {
+    @include m.boton(v.$verde, block);
+}
