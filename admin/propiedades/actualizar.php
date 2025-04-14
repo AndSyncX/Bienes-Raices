@@ -1,4 +1,12 @@
 <?php
+    
+    // Funciones
+    require '../../includes/funciones.php';
+    $auth = estaAutenticado();
+
+    if(!$auth) {
+        header('Location: /');
+    }
 
     // VALIDAR LA URL POR ID VÁLIDO
     $id = $_GET['id'];
@@ -78,24 +86,11 @@
         if(!$vendedores_id) {
             $errores[] = "Elige un vendedor";
         }
-        if (!$imagen['name'] || $imagen['error']) {
-            $errores[] = "La imagen es obligatoria";
-        }
-
-        // Validar por tamaño
-        $medida = 1000 * 1000;
-
-        if($imagen['size'] > $medida) {
-            $errores[] = 'La Imagen es muy pesada';
-        }
-
 
         // Revisar que el array de errores ese vacio
-
         if(empty($errores)) {
 
             /** SUBIDA DE ARCHIVOS **/
-
 
             // Crear carpeta
             $carpetaImagenes = '../../imagenes/';
@@ -104,27 +99,35 @@
                 mkdir($carpetaImagenes);
             }
 
-            //Generar un nombre único
-            $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
-            
-            // Subir imagen
-            move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen );
+            $nombreImagen = '';
+
+            if($imagen['name']) {
+                // Eliminar imagen previa
+
+                unlink($carpetaImagenes . $propiedad['imagen']);
+
+                // Generar un nombre único
+                $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
+                
+                // Subir imagen
+                move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen );
+            } else {
+                $nombreImagen = $propiedad['imagen'];
+            }
 
             // Insertar en la base de datos
-            $query = "INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedores_id) VALUES ('$titulo', '$precio', '$nombreImagen', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedores_id')";
+            $query = "UPDATE propiedades SET titulo = '$titulo', precio = '$precio', imagen = '$nombreImagen', descripcion = '$descripcion', habitaciones = $habitaciones, wc = $wc, estacionamiento = $estacionamiento, vendedores_id = '$vendedores_id' WHERE id = $id";
 
             //echo $query;
             $resultado = mysqli_query($db, $query);
 
             if ($resultado) {
                 // echo "Insertado Correctamente";
-                header('Location: /admin?resultado=1');
+                header('Location: /admin?resultado=2');
             }
         }
     }
 
-    // Funciones
-    require '../../includes/funciones.php';
     incluirTemplates('header'); 
 ?>
 
@@ -139,7 +142,7 @@
         </div>   
         <?php endforeach; ?>
 
-        <form class="formulario" method="POST" action="/admin/propiedades/crear.php" enctype="multipart/form-data">
+        <form class="formulario" method="POST" enctype="multipart/form-data">
             <fieldset>
                 <legend>Información General</legend>
 
