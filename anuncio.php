@@ -7,8 +7,9 @@
         header('Location: /');
     }
 
+    require 'includes/app.php';
+
     // Importar la conexión
-    require 'includes/config/database.php';
     $db = conectarDB();
 
     // Consultar
@@ -19,11 +20,10 @@
 
     if(!$resultado->num_rows) {
         header('Location: /');
-    } 
+    }
 
     $propiedad = mysqli_fetch_assoc($resultado);
 
-    require 'includes/funciones.php';
     incluirTemplates('header'); 
 ?>
 
