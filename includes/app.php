@@ -7,3 +7,5 @@ require __DIR__ . '/../vendor/autoload.php';
 use App\Propiedad;
 
 $propiedad = new Propiedad;
+
+Propiedad::setDB($db);

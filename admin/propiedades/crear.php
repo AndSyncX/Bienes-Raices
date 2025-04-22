@@ -33,16 +33,12 @@
 
     // Ejcutar el código despues de que el usuario envia el formulario
     if ($_SERVER['REQUEST_METHOD'] === "POST") {
-/*
-        echo "<pre>";
-        var_dump($_POST);
-        echo "</pre>";
 
-        echo "<pre>";
-        var_dump($_FILES);
-        echo "</pre>";
+        $propiedad = new Propiedad($_POST);
 
-        exit;*/
+        debuguear($propiedad);
+
+        $propiedad->guardar();
 
         // Asignar variables
         $titulo = mysqli_real_escape_string($db, $_POST['titulo']);
@@ -116,9 +112,7 @@
             // Subir imagen
             move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen );
 
-            // Insertar en la base de datos
-            $query = "INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedores_id) VALUES ('$titulo', '$precio', '$nombreImagen', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedores_id')";
-
+            
             //echo $query;
             $resultado = mysqli_query($db, $query);
 
